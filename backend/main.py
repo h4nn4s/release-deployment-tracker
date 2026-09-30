@@ -83,3 +83,15 @@ def create_deployment(
     db.refresh(new_deployment)
 
     return new_deployment
+
+@app.get("/api/releasse/{release_id}/deployments")
+def get_deployments(
+        release_id: int,
+        db: Session = Depends(get_db)
+
+):
+    return (
+        db.query(Deployment)
+        .filter(Deployment.release_id == release_id) # hämtar alla deployments som tillhör release 3
+        .all()
+    )
