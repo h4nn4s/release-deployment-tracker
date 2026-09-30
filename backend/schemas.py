@@ -10,3 +10,7 @@ class ReleaseCreate(BaseModel):
     application_id: int
     version: str
     description: str | None = None
+
+class DeploymentCreate(BaseModel):
+    release_id: int
+    environment: str

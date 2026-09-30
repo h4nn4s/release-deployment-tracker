@@ -3,9 +3,9 @@ from sqlalchemy.orm import Session
 
 from backend.database import Base, engine, get_db
 from backend import models
-from backend.models import Application, Release
+from backend.models import Application, Release, Deployment
 
-from backend.schemas import ApplicationCreate, ReleaseCreate
+from backend.schemas import ApplicationCreate, ReleaseCreate, DeploymentCreate
 
 
 # titta på alla modeller kopplade till Base -> skapa tabeller som saknas i db
@@ -65,3 +65,21 @@ def get_releases(
         .filter(Release.application_id == application_id)
         .all()
     )
+
+
+@app.post("/api/deployments")
+def create_deployment(
+    deployment: DeploymentCreate,
+    db: Session = Depends(get_db)
+
+):
+    new_deployment = Deployment(
+        release_id=deployment.release_id,
+        environment=deployment.environment
+    )
+
+    db.add(new_deployment)
+    db.commit()
+    db.refresh(new_deployment)
+
+    return new_deployment
