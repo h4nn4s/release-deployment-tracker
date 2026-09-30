@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from backend.database import Base, engine, get_db
@@ -43,6 +43,18 @@ def create_release(
     release: ReleaseCreate,
     db: Session = Depends(get_db)
 ):
+    
+    # fråga: finns application med X id?
+    application = db.query(Application).filter(
+        Application.id == release.application_id
+    ).first()
+
+    if application is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Application not found"
+        )
+    
     new_release = Release(
         application_id=release.application_id,
         version=release.version,
