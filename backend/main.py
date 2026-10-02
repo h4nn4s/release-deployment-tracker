@@ -18,8 +18,25 @@ def read_root():
     return {"message": "Release Deployment Tracker API"}
 
 @app.get("/api/applications")
-def get_applications(db: Session = Depends(get_db)):    # hämta db-session när endpoint körs
+def get_all_applications(db: Session = Depends(get_db)):    # hämta db-session när endpoint körs
     return db.query(Application).all()  # hämta alla rader fr applications
+
+@app.get("/api/applications/{application_id}")
+def get_application_by_id(
+    application_id: int,
+    db: Session = Depends(get_db)
+):
+    application = db.query(Application).filter(
+        Application.id == application_id
+    ).first()
+
+    if application is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Application not found"
+        )
+
+    return application
 
 @app.post("/api/applications")
 def create_application(
