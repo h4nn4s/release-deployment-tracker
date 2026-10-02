@@ -112,10 +112,10 @@ def get_release_by_id(
 
     return release
 
-@app.get("/api/applications({application_id}/releases")
+@app.get("/api/applications/{application_id}/releases")
 def get_releases(
-        application_id: int,
-        db: Session = Depends(get_db)
+    application_id: int,
+    db: Session = Depends(get_db)
 ):
     return (
         db.query(Release)
