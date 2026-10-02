@@ -44,7 +44,7 @@ def create_release(
     db: Session = Depends(get_db)
 ):
     
-    # fråga: finns application med X id?
+    # validationfråga: finns application med X id?
     application = db.query(Application).filter(
         Application.id == release.application_id
     ).first()
@@ -85,6 +85,16 @@ def create_deployment(
     db: Session = Depends(get_db)
 
 ):
+    release = db.query(Release).filter(
+        Release.id == deployment.release_id
+    ).first()
+
+    if release is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Release not found"
+        )
+
     new_deployment = Deployment(
         release_id=deployment.release_id,
         environment=deployment.environment
