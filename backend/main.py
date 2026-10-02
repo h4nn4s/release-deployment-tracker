@@ -84,6 +84,24 @@ def create_release(
 
     return new_release
 
+
+@app.get("/api/releases/{release_id}")
+def get_release_by_id(
+    release_id: int,
+    db: Session = Depends(get_db)
+):
+    release = db.query(Release).filter(
+        Release.id == release_id
+    ).first()
+
+    if release is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Release not found"
+        )
+
+    return release
+
 @app.post("/api/applications({application_id}/releases)")
 def get_releases(
         application_id: int,
@@ -123,7 +141,7 @@ def create_deployment(
 
     return new_deployment
 
-@app.get("/api/releasse/{release_id}/deployments")
+@app.get("/api/release/{release_id}/deployments")
 def get_deployments(
         release_id: int,
         db: Session = Depends(get_db)
