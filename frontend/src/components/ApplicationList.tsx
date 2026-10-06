@@ -9,7 +9,11 @@ type Application = {
     created_at: string
 }
 
-function ApplicationList() {
+type ApplicationListProps = {
+  onSelect: (id: number) => void
+}
+
+function ApplicationList({ onSelect }: ApplicationListProps) {
     /// frontend lagrar applications från api
     const [applications, setApplications] = useState<Application[]>([])
 
@@ -28,6 +32,7 @@ function ApplicationList() {
                 <ApplicationCard
                     key={application.id}
                     application={application}
+                    onSelect={onSelect}
                 />
             ))}
         </section>

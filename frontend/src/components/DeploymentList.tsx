@@ -81,9 +81,9 @@ function DeploymentList({ releaseId }: DeploymentListProps) {
                 <p>No deployments yet.</p>
             ) : (
                 deployments.map(deployment => (
-                    <article key={deployment.id}>
-                        <p>{deployment.environment}</p>
-                        <p>{deployment.deployed_at}</p>
+                    <article className="deployment" key={deployment.id}>
+                        <strong>{deployment.environment}</strong>
+                        <span>{new Date(deployment.deployed_at).toLocaleString()}</span>
                     </article>
                 ))
             )}

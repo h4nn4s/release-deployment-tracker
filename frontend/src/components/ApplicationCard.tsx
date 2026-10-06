@@ -6,15 +6,26 @@ type Application = {
 
 type ApplicationCardProps = {
     application: Application
+    onSelect: (id: number) => void
 }
 
-function ApplicationCard({ application }: ApplicationCardProps) {
+function ApplicationCard({
+    application,
+    onSelect
+}: ApplicationCardProps) {
     return (
-        <article>
+        <button
+            className="card"
+            onClick={() => onSelect(application.id)}
+        >
             <h3>{application.name}</h3>
-            <p>{application.description}</p>
 
-        </article>
+            {application.description && (
+                <p>{application.description}</p>
+            )}
+
+            <span>View releases →</span>
+        </button>
     )
 }
 
